@@ -7,3 +7,11 @@
 - axios
 - bootstrap
 
+
+## Setup
+```
+> git clone https://github.com/burakgules06/laboratorianfrontend.git
+> cd laboratorianfrontend
+> npm install
+> npm start
+
