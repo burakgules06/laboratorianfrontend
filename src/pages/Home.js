@@ -15,6 +15,8 @@ export default function Home() {
     }
   }, [searchTerm, sorted]);
 
+  //functions
+
   const loadReports = async () => {
     try {
       const response = await axios.get("http://localhost:8080/report/search", { params: { keyword: searchTerm } });

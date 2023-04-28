@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { findAllPatients, findAllLaboratorians, getReportById, editReport } from '../api/api';
+
 
 export default function EditReport() {
   const { fileNo } = useParams();
   const navigate = useNavigate();
-
   const [laboratorians, setLaboratorians] = useState([]);
   const [selectedLabId, setSelectedLabId] = useState('');
-
   const [patients, setPatients] = useState([]);
   const [selectedPatientId, setSelectedPatientId] = useState('');
 
@@ -19,14 +18,24 @@ export default function EditReport() {
     patientId: null,
   });
 
-  // Load report data on component mount
+  //useEffects
+
   useEffect(() => {
-    async function fetchReport() {
+    findAllPatients()
+      .then(data => setPatients(data))
+      .catch(error => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    findAllLaboratorians()
+      .then(data => setLaboratorians(data))
+      .catch(error => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    const fetchReport = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/report/findById/${fileNo}`
-        );
-        const data = response.data;
+        const data = await getReportById(fileNo);
         setReport({
           diagnosisTitle: data.diagnosisTitle,
           diagnosis: data.diagnosis,
@@ -38,35 +47,12 @@ export default function EditReport() {
       } catch (error) {
         console.log(error);
       }
-    }
+    };
     fetchReport();
   }, [fileNo]);
 
-  // Load patients and laboratorians on component mount
-  useEffect(() => {
-    async function fetchPatients() {
-      try {
-        const response = await axios.get('http://localhost:8080/patient/findAll');
-        setPatients(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchPatients();
-  }, []);
 
-  useEffect(() => {
-    async function fetchLaboratorians() {
-      try {
-        const response = await axios.get('http://localhost:8080/labpersonal/findAll');
-        setLaboratorians(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchLaboratorians();
-  }, []);
-
+  //Functions
   const handlePatientSelect = (event) => {
     setSelectedPatientId(event.target.value);
     setReport({ ...report, patientId: event.target.value });
@@ -83,9 +69,10 @@ export default function EditReport() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(`http://localhost:8080/report/edit/${fileNo}`, report);
+    await editReport(fileNo, report);
     navigate('/');
   };
+
 
   return (
     <div className="container">
@@ -118,20 +105,20 @@ export default function EditReport() {
             <div className='mb-3'>
               <label className='form-label mx-2'>Laborant:</label>
               <select
-              id='laboratorian-select'
-              onChange={handleLabSelect}
-              value={selectedLabId}
+                id='laboratorian-select'
+                onChange={handleLabSelect}
+                value={selectedLabId}
               >
-              <option value=''>Bir laborant seçin</option>
-              {laboratorians.map((laboratorian) => (
-                <option
-                  key={laboratorian.labIdNo}
-                  value={laboratorian.labIdNo}
-                >
-                  {laboratorian.name} {laboratorian.surname} ({laboratorian.labIdNo})
-                </option>
-              ))}
-            </select>
+                <option value=''>Bir laborant seçin</option>
+                {laboratorians.map((laboratorian) => (
+                  <option
+                    key={laboratorian.labIdNo}
+                    value={laboratorian.labIdNo}
+                  >
+                    {laboratorian.name} {laboratorian.surname} ({laboratorian.labIdNo})
+                  </option>
+                ))}
+              </select>
 
             </div>
 
