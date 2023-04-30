@@ -21,22 +21,39 @@ function ReportDetails() {
   }, [report.labIdNo, report.patientId, setReport]);
 
 
-
   return (
-    <div>
-      <h1> Rapor Detayları </h1>
-      <p><strong>Rapor Dosya Numarası: </strong> {report.fileNo}</p >
-      <p><strong>Tarih: </strong> {report.date}</p >
-      <p> <strong > Laborant: </strong> {report.labName} {report.labSurname}</p >
-      <p> <strong>Hasta: </strong> {report.patientName} {report.patientSurname}</p >
-      <p> <strong>Tanı Başlığı: </strong> {report.diagnosisTitle}</p >
-      <p> <strong>Tanı: </strong> {report.diagnosis}</p >
-      <p> Rapora ait fotoğrafı indirmek için tıklayın:
-        <button type='submit' className='btn btn-outline-success' onClick={
-          () => downloadAttachment(report.attachmentId)
-        }> İndir
-        </button>
-      </p>
+
+    <div className='container text-center'>
+      <table class="table table-striped-columns">
+        <thead>
+          <tr>
+            <th scope="col">Rapor Dosya Numarası</th>
+            <th scope="col">Tarih:</th>
+            <th scope="col">Laborant:</th>
+            <th scope="col">Hasta:</th>
+            <th scope="col">Tanı Başlığı:</th>
+            <th scope="col">Tanı:</th>
+            <th scope="col">Rapor Fotoğrafı</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{report.fileNo}</th>
+            <td>{report.date}</td>
+            <td>{report.labName} {report.labSurname}</td>
+            <td>{report.patientName} {report.patientSurname}</td>
+            <td>{report.diagnosisTitle}</td>
+            <td>{report.diagnosis}</td>
+            <td>
+              <button
+                type='submit'
+                className='btn btn-outline-success'
+                onClick={() => downloadAttachment(report.attachmentId)}> İndir
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <Link to='/' className='btn btn-outline-danger mx-2' >Geri dön</Link></div>
   );
 }

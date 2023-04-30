@@ -97,8 +97,8 @@ export default function AddReport() {
             </div>
             <div>
               <input type='file' name='file' accept='.jpg,.jpeg,.png' onChange={handleImage} />
-              <button>Ekle</button>
             </div>
+            <br></br>
             <div className='mb-3'>
               <label className='form-label mx-2'>Laborant:</label>
               <select id="laboratorian-select" onChange={handleLabSelect}>
